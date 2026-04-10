@@ -1,0 +1,140 @@
+.about-intro {
+  max-width: 62ch;
+}
+
+.about-section {
+  display: grid;
+  gap: 22px;
+}
+
+.about-section h2 {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+}
+
+.section-copy {
+  max-width: 60ch;
+}
+
+.timeline {
+  position: relative;
+  display: grid;
+  gap: 20px;
+  padding-left: 20px;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 6px;
+  width: 2px;
+  background: linear-gradient(180deg, #2e7d32 0%, rgba(46, 125, 50, 0.12) 100%);
+}
+
+.timeline-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: 18px;
+}
+
+.timeline-marker {
+  width: 14px;
+  height: 14px;
+  margin-top: 8px;
+  border: 3px solid #2e7d32;
+  border-radius: 50%;
+  background: #f7fbf4;
+  box-shadow: 0 0 0 6px rgba(135, 201, 94, 0.16);
+}
+
+.timeline-content {
+  padding: 20px 22px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(244, 249, 241, 0.96) 0%, rgba(255, 255, 255, 0.96) 100%);
+  border: 1px solid rgba(46, 125, 50, 0.14);
+}
+
+.timeline-period {
+  margin: 0 0 8px;
+  color: #2e7d32;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.timeline-content h3,
+.injury-card h3 {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+}
+
+.timeline-content p,
+.injury-card p {
+  margin: 0;
+  color: #425466;
+}
+
+.injury-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.injury-card {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  gap: 8px;
+  min-height: 170px;
+  padding: 22px;
+  border-radius: 24px;
+  border: 1px solid rgba(16, 32, 48, 0.08);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.injury-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 6px;
+}
+
+.injury-card--warning::before {
+  background: linear-gradient(180deg, #f59e0b 0%, #facc15 100%);
+}
+
+.injury-card--danger::before {
+  background: linear-gradient(180deg, #ef4444 0%, #f97316 100%);
+}
+
+.injury-area {
+  margin: 0;
+  color: #102030;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 640px) {
+  .timeline {
+    padding-left: 12px;
+  }
+
+  .timeline-item {
+    grid-template-columns: 18px minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .timeline-content {
+    padding: 18px;
+  }
+
+  .injury-grid {
+    grid-template-columns: 1fr;
+  }
+}
