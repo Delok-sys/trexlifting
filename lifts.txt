@@ -1,0 +1,25 @@
+Low-Bar Kniebeuge	1
+High-Bar Kniebeuge	0,92
+Frontkniebeuge	0,77
+Safety-Bar Kniebeuge	0,82
+Box Squat	0,9
+Pausierte Kniebeuge	0,9
+Tempo Kniebeuge	0,85
+
+Bankdrücken	1
+Pausiertes Bankdrücken	0,94
+Tempo Bankdrücken	0,9
+Close-Grip Bankdrücken	0,9
+Incline Bankdrücken (LH)	0,7
+Floor Press	0,95
+Reverse Grip Bankdrücken	0,85
+Spoto Bankdrücken	0,92
+Larsen Bankdrücken	0,88
+
+Konventionelles Kreuzheben	1
+Sumo Kreuzheben	1
+Trap Bar Deadlift	0,95
+Defizit Kreuzheben	0,9
+Pausiertes Kreuzheben	0,9
+Rumänisches Kreuzheben	0,68
+Stiff-Leg Deadlift	0,78

@@ -281,7 +281,8 @@ button {
   font-weight: 700;
 }
 
-.form-field input {
+.form-field input,
+.form-field select {
   width: 100%;
   padding: 12px 14px;
   border: 1px solid rgba(16, 32, 48, 0.14);
@@ -291,7 +292,12 @@ button {
   font: inherit;
 }
 
-.form-field input:focus {
+.form-field select {
+  cursor: pointer;
+}
+
+.form-field input:focus,
+.form-field select:focus {
   outline: 2px solid rgba(46, 125, 50, 0.22);
   border-color: #2e7d32;
 }

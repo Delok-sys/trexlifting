@@ -5,11 +5,11 @@ import { saveOneRepMaxes, selectOneRepMaxState } from "../../store/slices/oneRep
 
 const toolSections = [
   {
-    id: "dummy-feature",
-    title: "Dummy Feature",
+    id: "training-weight-range",
+    title: "Trainingsgewicht Rechner",
     description:
-      "Dieser erste Bereich dient als Platzhalter fuer ein spaeteres Tool. Du kannst hier kuenftig Eingaben, Berechnungen oder kleine Trainings-Utilities unterbringen.",
-    status: "In Vorbereitung",
+      "Waehlt eine Uebungsvariation und gibt fuer Wiederholungen plus RIR eine konkrete Gewichtsrange auf Basis deines gespeicherten 1RM aus.",
+    status: "Verfuegbar",
   },
 ];
 
@@ -19,6 +19,12 @@ const initialLiftForm = {
   deadlift: { weight: "", reps: "", rir: "" },
 };
 
+const createInitialModuleInput = () => ({
+  selectedLift: "",
+  reps: "5",
+  rir: "2",
+});
+
 export function ToolsPageContainer() {
   const dispatch = useDispatch();
   const { lifts, status, error } = useSelector(selectOneRepMaxState);
@@ -27,6 +33,8 @@ export function ToolsPageContainer() {
   );
   const [liftForm, setLiftForm] = useState(initialLiftForm);
   const [placedModules, setPlacedModules] = useState([]);
+  const [moduleInputs, setModuleInputs] = useState({});
+  const [nextModuleInstanceNumber, setNextModuleInstanceNumber] = useState(1);
   const [isDropActive, setIsDropActive] = useState(false);
   const [draggedPlacedModuleId, setDraggedPlacedModuleId] = useState(null);
 
@@ -109,14 +117,22 @@ export function ToolsPageContainer() {
       return;
     }
 
+    const instanceId = `${module.id}-${nextModuleInstanceNumber}`;
+    const instanceLabel = `Kopie ${nextModuleInstanceNumber}`;
+
     setPlacedModules((currentModules) => [
       ...currentModules,
       {
         ...module,
-        instanceId: `${module.id}-${currentModules.length + 1}`,
-        instanceLabel: `Kopie ${currentModules.length + 1}`,
+        instanceId,
+        instanceLabel,
       },
     ]);
+    setModuleInputs((currentInputs) => ({
+      ...currentInputs,
+      [instanceId]: createInitialModuleInput(),
+    }));
+    setNextModuleInstanceNumber((currentNumber) => currentNumber + 1);
     setInfoMessage(`"${module.title}" wurde als neue Modul-Kopie abgelegt.`);
   };
 
@@ -156,7 +172,22 @@ export function ToolsPageContainer() {
     setPlacedModules((currentModules) =>
       currentModules.filter((module) => module.instanceId !== instanceId),
     );
+    setModuleInputs((currentInputs) => {
+      const nextInputs = { ...currentInputs };
+      delete nextInputs[instanceId];
+      return nextInputs;
+    });
     setInfoMessage("Das Modul wurde aus dem oberen Bereich entfernt.");
+  };
+
+  const handleModuleInputChange = (instanceId, fieldName, value) => {
+    setModuleInputs((currentInputs) => ({
+      ...currentInputs,
+      [instanceId]: {
+        ...(currentInputs[instanceId] ?? createInitialModuleInput()),
+        [fieldName]: value,
+      },
+    }));
   };
 
   return (
@@ -166,6 +197,7 @@ export function ToolsPageContainer() {
       liftStatus={status}
       liftError={error}
       storedLifts={lifts}
+      moduleInputs={moduleInputs}
       isDropActive={isDropActive}
       placedModules={placedModules}
       draggedPlacedModuleId={draggedPlacedModuleId}
@@ -181,6 +213,7 @@ export function ToolsPageContainer() {
       onDragEnd={handleDragEnd}
       onPlacedReorder={handlePlacedReorder}
       onRemoveModule={handleRemoveModule}
+      onModuleInputChange={handleModuleInputChange}
     />
   );
 }
