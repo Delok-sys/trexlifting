@@ -1,6 +1,6 @@
 import "../../styles/ToolsPage.css";
-import { ToolLibrarySection } from "./ToolLibrarySection";
-import { ToolsToolbar } from "./ToolsToolbar";
+import { ToolLibrarySection } from "./tool-library/ToolLibrarySection";
+import { ToolsToolbar } from "./placed-modules/ToolsToolbar";
 
 export function ToolsPage({
   infoMessage,

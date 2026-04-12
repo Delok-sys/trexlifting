@@ -11,12 +11,12 @@ export function TrainingWeightModulePanel({
     <div className="page-stack page-stack--sm">
       <div className="tools-module-grid">
         <label className="form-field">
-          <span>Uebung</span>
+          <span>Übung</span>
           <select
             value={moduleInput?.selectedLift ?? ""}
             onChange={(event) => onModuleInputChange(instanceId, "selectedLift", event.target.value)}
           >
-            <option value="">Variation auswaehlen</option>
+            <option value="">Variation</option>
             {liftOptionGroups.map((group) => (
               <optgroup key={group.baseLiftKey} label={group.baseLiftLabel}>
                 {group.options.map((option) => (
@@ -30,7 +30,7 @@ export function TrainingWeightModulePanel({
         </label>
 
         <label className="form-field">
-          <span>Wiederholungen</span>
+          <span>Reps</span>
           <select
             value={moduleInput?.reps ?? "5"}
             onChange={(event) => onModuleInputChange(instanceId, "reps", event.target.value)}
@@ -67,15 +67,6 @@ export function TrainingWeightModulePanel({
                 {calculation.formattedMinWeight} - {calculation.formattedMaxWeight} kg
               </strong>
             </div>
-
-            <p className="tools-module-copy">
-              Exakt berechnet: {calculation.formattedExactWeight} kg. Gerundet auf{" "}
-              {calculation.formattedRoundedWeight} kg.
-            </p>
-            <p className="tools-module-copy">
-              Basis: {calculation.baseLiftLabel} 1RM mit Variationsfaktor fuer{" "}
-              {calculation.selectedLiftLabel}.
-            </p>
           </div>
         ) : (
           <p className="form-feedback form-feedback--error">{calculation.message}</p>

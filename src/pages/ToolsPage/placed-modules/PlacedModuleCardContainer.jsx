@@ -1,5 +1,5 @@
 import { PlacedModuleCard } from "./PlacedModuleCard";
-import { TrainingWeightModuleContainer } from "./TrainingWeightModuleContainer";
+import { TrainingWeightModuleContainer } from "../training-weight-module/TrainingWeightModuleContainer";
 
 function renderModuleContent(module, moduleInput, storedLifts, onModuleInputChange) {
   if (module.id === "training-weight-range") {

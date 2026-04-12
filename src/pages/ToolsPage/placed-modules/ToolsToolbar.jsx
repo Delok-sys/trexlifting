@@ -1,4 +1,4 @@
-import { LiftCalculatorPanel } from "./LiftCalculatorPanel";
+import { LiftCalculatorPanel } from "../lift-calculator/LiftCalculatorPanel";
 import { PlacedModulesSection } from "./PlacedModulesSection";
 
 export function ToolsToolbar({

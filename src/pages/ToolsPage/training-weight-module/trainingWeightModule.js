@@ -1,5 +1,5 @@
-import liftsRaw from "../../../lifts.txt?raw";
-import rirRaw from "../../../rir.txt?raw";
+import liftsRaw from "../../../../lifts.txt?raw";
+import rirRaw from "../../../../rir.txt?raw";
 
 const BASE_LIFT_KEYS = ["squat", "bench", "deadlift"];
 
