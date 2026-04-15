@@ -1,5 +1,4 @@
 import "../../styles/ToolsPage.css";
-import { ToolLibrarySection } from "./tool-library/ToolLibrarySection";
 import { ToolsToolbar } from "./placed-modules/ToolsToolbar";
 
 export function ToolsPage({
@@ -8,23 +7,16 @@ export function ToolsPage({
   liftStatus,
   liftError,
   storedLifts,
-  moduleInputs,
-  isDropActive,
-  placedModules,
-  draggedPlacedModuleId,
+  activeModuleId,
   toolSections,
+  moduleInputs,
   onLiftInputChange,
   onLiftSubmit,
+  onModuleToggle,
   onPlaceholderAction,
-  onLibraryDragStart,
-  onPlacedDragStart,
-  onDragOver,
-  onDragLeave,
-  onDrop,
-  onDragEnd,
-  onPlacedReorder,
-  onRemoveModule,
   onModuleInputChange,
+  onModuleRowAdd,
+  onModuleRowRemove,
 }) {
   return (
     <main className="page-shell">
@@ -32,10 +24,6 @@ export function ToolsPage({
         <div className="page-stack page-stack--sm">
           <p className="page-kicker">Tools</p>
           <h1>Dein Arbeitsbereich fuer Tools</h1>
-          <p className="page-copy">
-            Hier entsteht ein nutzbarer Bereich fuer kleine Helfer, Rechner und Trainings-Features.
-            Module koennen bereits per Drag-and-Drop in den oberen Ablagebereich gezogen werden.
-          </p>
         </div>
 
         <ToolsToolbar
@@ -44,27 +32,16 @@ export function ToolsPage({
           liftStatus={liftStatus}
           liftError={liftError}
           storedLifts={storedLifts}
+          activeModuleId={activeModuleId}
+          toolSections={toolSections}
           moduleInputs={moduleInputs}
-          isDropActive={isDropActive}
-          placedModules={placedModules}
-          draggedPlacedModuleId={draggedPlacedModuleId}
           onLiftInputChange={onLiftInputChange}
           onLiftSubmit={onLiftSubmit}
+          onModuleToggle={onModuleToggle}
           onPlaceholderAction={onPlaceholderAction}
-          onPlacedDragStart={onPlacedDragStart}
-          onDragOver={onDragOver}
-          onDragLeave={onDragLeave}
-          onDrop={onDrop}
-          onDragEnd={onDragEnd}
-          onPlacedReorder={onPlacedReorder}
-          onRemoveModule={onRemoveModule}
           onModuleInputChange={onModuleInputChange}
-        />
-
-        <ToolLibrarySection
-          toolSections={toolSections}
-          onLibraryDragStart={onLibraryDragStart}
-          onDragEnd={onDragEnd}
+          onModuleRowAdd={onModuleRowAdd}
+          onModuleRowRemove={onModuleRowRemove}
         />
       </section>
     </main>

@@ -335,55 +335,6 @@ button {
   line-height: 1.1;
 }
 
-.feature-card {
-  display: grid;
-  gap: 14px;
-  min-height: 300px;
-  padding: 24px;
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(16, 32, 48, 0.08);
-  box-shadow: 0 16px 36px rgba(16, 32, 48, 0.08);
-}
-
-.feature-card h3 {
-  margin: 0;
-  font-size: 1.25rem;
-}
-
-.feature-card p {
-  margin: 0;
-  color: #425466;
-}
-
-.feature-card-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.feature-card--draggable {
-  cursor: grab;
-}
-
-.feature-card--draggable:active,
-.feature-card--placed:active {
-  cursor: grabbing;
-}
-
-.feature-card--placed {
-  min-height: 260px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(244, 249, 241, 0.96) 100%);
-  border-color: rgba(46, 125, 50, 0.16);
-  cursor: grab;
-}
-
-.feature-card--placed.is-dragging {
-  opacity: 0.55;
-  transform: scale(0.99);
-}
-
 .status-pill {
   display: inline-flex;
   align-items: center;

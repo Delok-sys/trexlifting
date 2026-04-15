@@ -1,5 +1,5 @@
 import { LiftCalculatorPanel } from "../lift-calculator/LiftCalculatorPanel";
-import { PlacedModulesSection } from "./PlacedModulesSection";
+import { ToolLibrarySection } from "../tool-library/ToolLibrarySection";
 
 export function ToolsToolbar({
   infoMessage,
@@ -7,21 +7,16 @@ export function ToolsToolbar({
   liftStatus,
   liftError,
   storedLifts,
+  activeModuleId,
+  toolSections,
   moduleInputs,
-  isDropActive,
-  placedModules,
-  draggedPlacedModuleId,
   onLiftInputChange,
   onLiftSubmit,
+  onModuleToggle,
   onPlaceholderAction,
-  onPlacedDragStart,
-  onDragOver,
-  onDragLeave,
-  onDrop,
-  onDragEnd,
-  onPlacedReorder,
-  onRemoveModule,
   onModuleInputChange,
+  onModuleRowAdd,
+  onModuleRowRemove,
 }) {
   return (
     <section className="tools-toolbar" aria-label="Tool-Aktionen">
@@ -35,30 +30,16 @@ export function ToolsToolbar({
           onLiftSubmit={onLiftSubmit}
         />
 
-        <PlacedModulesSection
-          placedModules={placedModules}
-          draggedPlacedModuleId={draggedPlacedModuleId}
+        <ToolLibrarySection
+          toolSections={toolSections}
+          activeModuleId={activeModuleId}
           moduleInputs={moduleInputs}
           storedLifts={storedLifts}
-          onPlacedDragStart={onPlacedDragStart}
-          onDragEnd={onDragEnd}
-          onPlacedReorder={onPlacedReorder}
-          onRemoveModule={onRemoveModule}
+          onModuleToggle={onModuleToggle}
           onModuleInputChange={onModuleInputChange}
+          onModuleRowAdd={onModuleRowAdd}
+          onModuleRowRemove={onModuleRowRemove}
         />
-
-        <div
-          className={isDropActive ? "tools-dropzone is-active" : "tools-dropzone"}
-          onDragOver={onDragOver}
-          onDragLeave={onDragLeave}
-          onDrop={onDrop}
-        >
-          <p className="tools-dropzone-label">Modul hier ablegen</p>
-          <p className="tools-dropzone-copy">
-            Ziehe ein Modul aus dem Bereich "Erste Module" hier hinein. Es wird als Kopie oberhalb
-            dieses Feldes eingefuegt.
-          </p>
-        </div>
       </div>
 
       <div className="action-row">

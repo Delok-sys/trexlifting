@@ -72,7 +72,7 @@ export function LiftCalculatorPanel({
   onLiftSubmit,
 }) {
   return (
-    <section className="panel page-stack" aria-labelledby="tools-lift-form-title">
+    <section className="panel page-stack tools-lift-panel" aria-labelledby="tools-lift-form-title">
       <div className="page-section-head">
         <p className="section-kicker">1RM Rechner</p>
         <h2 id="tools-lift-form-title">Lifts eintragen</h2>

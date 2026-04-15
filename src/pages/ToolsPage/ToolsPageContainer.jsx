@@ -11,6 +11,13 @@ const toolSections = [
       "Waehlt eine Uebungsvariation und gibt fuer Wiederholungen plus RIR eine konkrete Gewichtsrange auf Basis deines gespeicherten 1RM aus.",
     status: "Verfuegbar",
   },
+  {
+    id: "meet-attempt-planner",
+    title: "Wettkampf Versuchswahl",
+    description:
+      "Berechnet fuer Kniebeuge, Bankdruecken und Kreuzheben Opener-, Zweit- und Drittversuch auf Basis deiner gespeicherten 1RMs.",
+    status: "Verfuegbar",
+  },
 ];
 
 const initialLiftForm = {
@@ -19,24 +26,30 @@ const initialLiftForm = {
   deadlift: { weight: "", reps: "", rir: "" },
 };
 
-const createInitialModuleInput = () => ({
+let trainingWeightRowIdCounter = 0;
+
+const createTrainingWeightRow = () => ({
+  id: `training-weight-row-${trainingWeightRowIdCounter++}`,
   selectedLift: "",
   reps: "5",
   rir: "2",
+});
+
+const createInitialModuleInput = () => ({
+  rows: [createTrainingWeightRow()],
 });
 
 export function ToolsPageContainer() {
   const dispatch = useDispatch();
   const { lifts, status, error } = useSelector(selectOneRepMaxState);
   const [infoMessage, setInfoMessage] = useState(
-    "Ziehe ein Modul in den Ablagebereich oder waehle eine Aktion aus.",
+    "Waehle unter dem 1RM Rechner ein Modul aus, um es direkt zu oeffnen.",
   );
   const [liftForm, setLiftForm] = useState(initialLiftForm);
-  const [placedModules, setPlacedModules] = useState([]);
-  const [moduleInputs, setModuleInputs] = useState({});
-  const [nextModuleInstanceNumber, setNextModuleInstanceNumber] = useState(1);
-  const [isDropActive, setIsDropActive] = useState(false);
-  const [draggedPlacedModuleId, setDraggedPlacedModuleId] = useState(null);
+  const [activeModuleId, setActiveModuleId] = useState(toolSections[0].id);
+  const [moduleInputs, setModuleInputs] = useState({
+    "training-weight-range": createInitialModuleInput(),
+  });
 
   useEffect(() => {
     if (status === "succeeded") {
@@ -72,122 +85,60 @@ export function ToolsPageContainer() {
     }
   };
 
-  const handleLibraryDragStart = (event, module) => {
-    event.dataTransfer.setData("text/tool-drag-source", "library");
-    event.dataTransfer.setData("text/tool-module-id", module.id);
-    event.dataTransfer.effectAllowed = "copy";
-    setInfoMessage(`"${module.title}" kann jetzt im Ablagebereich abgelegt werden.`);
-  };
+  const handleModuleToggle = (moduleId) => {
+    const selectedModule = toolSections.find((module) => module.id === moduleId);
 
-  const handlePlacedDragStart = (event, module) => {
-    event.dataTransfer.setData("text/tool-drag-source", "placed");
-    event.dataTransfer.setData("text/tool-instance-id", module.instanceId);
-    event.dataTransfer.effectAllowed = "move";
-    setDraggedPlacedModuleId(module.instanceId);
-    setInfoMessage(`"${module.title}" kann jetzt im oberen Bereich neu angeordnet werden.`);
-  };
-
-  const handleDragOver = (event) => {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = "copy";
-    setIsDropActive(true);
-  };
-
-  const handleDragLeave = (event) => {
-    if (!event.currentTarget.contains(event.relatedTarget)) {
-      setIsDropActive(false);
-    }
-  };
-
-  const handleDrop = (event) => {
-    event.preventDefault();
-    const dragSource = event.dataTransfer.getData("text/tool-drag-source");
-    const moduleId = event.dataTransfer.getData("text/tool-module-id");
-    const module = toolSections.find((item) => item.id === moduleId);
-
-    setIsDropActive(false);
-    setDraggedPlacedModuleId(null);
-
-    if (dragSource !== "library") {
+    if (!selectedModule) {
       return;
     }
 
-    if (!module) {
-      setInfoMessage("Das Modul konnte nicht abgelegt werden. Bitte versuche es erneut.");
-      return;
-    }
-
-    const instanceId = `${module.id}-${nextModuleInstanceNumber}`;
-    const instanceLabel = `Kopie ${nextModuleInstanceNumber}`;
-
-    setPlacedModules((currentModules) => [
-      ...currentModules,
-      {
-        ...module,
-        instanceId,
-        instanceLabel,
-      },
-    ]);
-    setModuleInputs((currentInputs) => ({
-      ...currentInputs,
-      [instanceId]: createInitialModuleInput(),
-    }));
-    setNextModuleInstanceNumber((currentNumber) => currentNumber + 1);
-    setInfoMessage(`"${module.title}" wurde als neue Modul-Kopie abgelegt.`);
+    setActiveModuleId((currentModuleId) => (currentModuleId === moduleId ? currentModuleId : moduleId));
+    setInfoMessage(`"${selectedModule.title}" ist jetzt geoeffnet.`);
   };
 
-  const handleDragEnd = () => {
-    setIsDropActive(false);
-    setDraggedPlacedModuleId(null);
-  };
-
-  const handlePlacedReorder = (event, targetInstanceId) => {
-    event.preventDefault();
-    const dragSource = event.dataTransfer.getData("text/tool-drag-source");
-    const sourceInstanceId = event.dataTransfer.getData("text/tool-instance-id");
-
-    if (dragSource !== "placed" || !sourceInstanceId || sourceInstanceId === targetInstanceId) {
-      return;
-    }
-
-    setPlacedModules((currentModules) => {
-      const sourceIndex = currentModules.findIndex((module) => module.instanceId === sourceInstanceId);
-      const targetIndex = currentModules.findIndex((module) => module.instanceId === targetInstanceId);
-
-      if (sourceIndex === -1 || targetIndex === -1) {
-        return currentModules;
-      }
-
-      const nextModules = [...currentModules];
-      const [movedModule] = nextModules.splice(sourceIndex, 1);
-      nextModules.splice(targetIndex, 0, movedModule);
-      return nextModules;
-    });
-
-    setDraggedPlacedModuleId(null);
-    setInfoMessage("Das Modul wurde im oberen Bereich neu angeordnet.");
-  };
-
-  const handleRemoveModule = (instanceId) => {
-    setPlacedModules((currentModules) =>
-      currentModules.filter((module) => module.instanceId !== instanceId),
-    );
+  const handleModuleInputChange = (moduleId, fieldName, value) => {
     setModuleInputs((currentInputs) => {
-      const nextInputs = { ...currentInputs };
-      delete nextInputs[instanceId];
-      return nextInputs;
+      const moduleInput = currentInputs[moduleId] ?? createInitialModuleInput();
+
+      return {
+        ...currentInputs,
+        [moduleId]: {
+          ...moduleInput,
+          rows: moduleInput.rows.map((row) =>
+            row.id === fieldName ? { ...row, [value.fieldName]: value.fieldValue } : row,
+          ),
+        },
+      };
     });
-    setInfoMessage("Das Modul wurde aus dem oberen Bereich entfernt.");
   };
 
-  const handleModuleInputChange = (instanceId, fieldName, value) => {
-    setModuleInputs((currentInputs) => ({
-      ...currentInputs,
-      [instanceId]: {
-        ...(currentInputs[instanceId] ?? createInitialModuleInput()),
-        [fieldName]: value,
-      },
-    }));
+  const handleModuleRowAdd = (moduleId) => {
+    setModuleInputs((currentInputs) => {
+      const moduleInput = currentInputs[moduleId] ?? createInitialModuleInput();
+
+      return {
+        ...currentInputs,
+        [moduleId]: {
+          ...moduleInput,
+          rows: [...moduleInput.rows, createTrainingWeightRow()],
+        },
+      };
+    });
+  };
+
+  const handleModuleRowRemove = (moduleId, rowId) => {
+    setModuleInputs((currentInputs) => {
+      const moduleInput = currentInputs[moduleId] ?? createInitialModuleInput();
+      const nextRows = moduleInput.rows.filter((row) => row.id !== rowId);
+
+      return {
+        ...currentInputs,
+        [moduleId]: {
+          ...moduleInput,
+          rows: nextRows.length > 0 ? nextRows : [createTrainingWeightRow()],
+        },
+      };
+    });
   };
 
   return (
@@ -197,23 +148,16 @@ export function ToolsPageContainer() {
       liftStatus={status}
       liftError={error}
       storedLifts={lifts}
-      moduleInputs={moduleInputs}
-      isDropActive={isDropActive}
-      placedModules={placedModules}
-      draggedPlacedModuleId={draggedPlacedModuleId}
+      activeModuleId={activeModuleId}
       toolSections={toolSections}
+      moduleInputs={moduleInputs}
       onLiftInputChange={handleLiftInputChange}
       onLiftSubmit={handleLiftSubmit}
+      onModuleToggle={handleModuleToggle}
       onPlaceholderAction={handlePlaceholderAction}
-      onLibraryDragStart={handleLibraryDragStart}
-      onPlacedDragStart={handlePlacedDragStart}
-      onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
-      onDrop={handleDrop}
-      onDragEnd={handleDragEnd}
-      onPlacedReorder={handlePlacedReorder}
-      onRemoveModule={handleRemoveModule}
       onModuleInputChange={handleModuleInputChange}
+      onModuleRowAdd={handleModuleRowAdd}
+      onModuleRowRemove={handleModuleRowRemove}
     />
   );
 }
