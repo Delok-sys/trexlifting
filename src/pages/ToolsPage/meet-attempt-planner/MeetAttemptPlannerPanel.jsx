@@ -54,9 +54,7 @@ export function MeetAttemptPlannerPanel({ calculation }) {
               <div className="tools-attempt-matrix-head" aria-hidden="true" />
               {readyLifts.map((lift) => (
                 <div key={lift.key} className="tools-attempt-lift-head">
-                  <span className="eyebrow">Wettkampf Lift</span>
                   <h4>{lift.label}</h4>
-                  <span className="status-pill">1RM {lift.oneRepMax} kg</span>
                 </div>
               ))}
 

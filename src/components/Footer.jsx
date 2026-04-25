@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
 
 const footerNavigation = [
-  { label: "Home", path: "/" },
-  { label: "Tools", path: "/tools" },
-  { label: "Angebot", path: "/angebot" },
-  { label: "Über mich", path: "/ueber-mich" },
+  { label: "Dashboard", path: "/dashboard" },
+  { label: "Coaching", path: "/coaching" },
+  { label: "Ueber mich", path: "/ueber-mich" },
+  { label: "Kontakt", path: "/kontakt" },
 ];
 
 const footerServiceLinks = [
+  { label: "Home", path: "/" },
   { label: "Kontakt", path: "/kontakt" },
   { label: "Impressum", path: "/impressum" },
   { label: "Datenschutz", path: "/datenschutz" },
@@ -19,15 +20,15 @@ export function Footer() {
   return (
     <footer className="site-footer">
       <div className="footer-grid">
-        <section className="footer-column footer-brand-column" aria-label="TrexLifting">
+        <section className="footer-column footer-brand-column" aria-label="trexlifting">
           <Link className="brand footer-brand" to="/">
             <span className="brand-mark" aria-hidden="true">
               T
             </span>
-            <span className="brand-text">TrexLifting</span>
+            <span className="brand-text">trexlifting</span>
           </Link>
           <p className="footer-copy">
-            Krafttraining, Tools und Inhalte rund um deinen nachhaltigen Fortschritt im Gym.
+            Das datenbasierte Strength System fuer Planung, Analyse und Wettkampfvorbereitung.
           </p>
         </section>
 
@@ -72,7 +73,7 @@ export function Footer() {
       </div>
 
       <div className="footer-bottom">
-        <p className="footer-meta">© 2026 TrexLifting. Alle Rechte vorbehalten.</p>
+        <p className="footer-meta">(c) 2026 trexlifting. Alle Rechte vorbehalten.</p>
       </div>
     </footer>
   );

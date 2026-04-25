@@ -1,16 +1,14 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { AppLayout } from "./layout/AppLayout";
 import {
   AboutPage,
-  AccountPage,
+  CoachingPage,
   ContactPage,
-  ExperiencesPage,
+  DashboardPage,
   HomePage,
   ImprintPage,
   NotFoundPage,
-  OfferPage,
   PrivacyPage,
-  ToolsPage,
 } from "../pages";
 
 export default function App() {
@@ -18,11 +16,21 @@ export default function App() {
     <Routes>
       <Route element={<AppLayout />}>
         <Route index element={<HomePage />} />
-        <Route path="/tools" element={<ToolsPage />} />
-        <Route path="/angebot" element={<OfferPage />} />
-        <Route path="/erfahrungen" element={<ExperiencesPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/strength-profil" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/planung" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/analyse" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/wettkampf" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/coaching" element={<CoachingPage />} />
         <Route path="/ueber-mich" element={<AboutPage />} />
-        <Route path="/account" element={<AccountPage />} />
+
+        <Route path="/tools" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/angebot" element={<Navigate to="/coaching" replace />} />
+        <Route path="/smart-strength-plan" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/technik-analyse" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/erfahrungen" element={<Navigate to="/coaching" replace />} />
+        <Route path="/account" element={<Navigate to="/dashboard" replace />} />
+
         <Route path="/kontakt" element={<ContactPage />} />
         <Route path="/impressum" element={<ImprintPage />} />
         <Route path="/datenschutz" element={<PrivacyPage />} />

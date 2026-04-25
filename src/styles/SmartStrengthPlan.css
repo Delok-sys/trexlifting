@@ -1,0 +1,67 @@
+﻿.smart-plan-inline-settings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.smart-plan-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(16, 32, 48, 0.14);
+  background: rgba(255, 255, 255, 0.74);
+}
+
+.smart-plan-checkbox input {
+  margin: 0;
+}
+
+.smart-plan-exercise-list {
+  display: grid;
+  gap: 14px;
+}
+
+.smart-plan-exercise-card {
+  gap: 10px;
+}
+
+.smart-plan-exercise-card h4 {
+  margin: 0;
+}
+
+.smart-plan-exercise-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  color: #425466;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.smart-plan-recommendation {
+  border: 1px solid rgba(16, 32, 48, 0.08);
+}
+
+@media (max-width: 640px) {
+  .smart-plan-inline-settings {
+    flex-direction: column;
+  }
+
+  .smart-plan-exercise-metrics {
+    grid-template-columns: 1fr;
+  }
+}
+.smart-plan-check-metrics {
+  display: grid;
+  gap: 8px;
+  color: #425466;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.smart-plan-check-day-list {
+  display: grid;
+  gap: 14px;
+}

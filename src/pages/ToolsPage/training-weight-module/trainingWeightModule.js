@@ -1,27 +1,19 @@
 import liftsRaw from "../../../../lifts.txt?raw";
 import rirRaw from "../../../../rir.txt?raw";
-
-const BASE_LIFT_KEYS = ["squat", "bench", "deadlift"];
+import {
+  calculateVariationWeight,
+  formatWeight,
+  LIFT_LABELS,
+  LIFT_KEYS,
+} from "../../../lib/strengthCalculations";
 
 const BASE_LIFT_LABELS = {
-  squat: "Kniebeuge",
-  bench: "Bankdruecken",
-  deadlift: "Kreuzheben",
+  squat: LIFT_LABELS.squat,
+  bench: LIFT_LABELS.bench,
+  deadlift: LIFT_LABELS.deadlift,
 };
 
 const parseDecimal = (value) => Number.parseFloat(value.replace(",", "."));
-
-const roundToSingleDecimal = (value) => Math.round(value * 10) / 10;
-
-const roundToNearestTwoPointFive = (value) => Math.round(value / 2.5) * 2.5;
-
-const formatWeight = (value) => {
-  if (!Number.isFinite(value)) {
-    return "-";
-  }
-
-  return Number.isInteger(value) ? `${value}` : value.toFixed(1);
-};
 
 const buildLiftOptions = () => {
   const sections = liftsRaw
@@ -35,16 +27,16 @@ const buildLiftOptions = () => {
     );
 
   return sections.map((sectionLines, index) => ({
-    baseLiftKey: BASE_LIFT_KEYS[index],
-    baseLiftLabel: BASE_LIFT_LABELS[BASE_LIFT_KEYS[index]],
+    baseLiftKey: LIFT_KEYS[index],
+    baseLiftLabel: BASE_LIFT_LABELS[LIFT_KEYS[index]],
     options: sectionLines.map((line, optionIndex) => {
       const [label, rawFactor] = line.split("\t");
 
       return {
-        id: `${BASE_LIFT_KEYS[index]}-${optionIndex}`,
-        value: `${BASE_LIFT_KEYS[index]}:${optionIndex}`,
+        id: `${LIFT_KEYS[index]}-${optionIndex}`,
+        value: `${LIFT_KEYS[index]}:${optionIndex}`,
         label,
-        baseLiftKey: BASE_LIFT_KEYS[index],
+        baseLiftKey: LIFT_KEYS[index],
         factor: parseDecimal(rawFactor),
       };
     }),
@@ -123,22 +115,24 @@ export const calculateTrainingWeightRange = ({ selectedLift, reps, rir, storedLi
     };
   }
 
-  const variationOneRepMax = baseOneRepMax * selectedOption.factor;
-  const exactWeight = variationOneRepMax * percentage;
-  const roundedWeight = roundToNearestTwoPointFive(exactWeight);
+  const calculation = calculateVariationWeight({
+    baseOneRepMax,
+    variationFactor: selectedOption.factor,
+    percentage,
+  });
 
   return {
     status: "ready",
     selectedLiftLabel: selectedOption.label,
     baseLiftLabel: BASE_LIFT_LABELS[selectedOption.baseLiftKey],
-    variationOneRepMax: roundToSingleDecimal(variationOneRepMax),
-    exactWeight: roundToSingleDecimal(exactWeight),
-    roundedWeight,
-    minWeight: Math.max(0, roundedWeight - 2.5),
-    maxWeight: roundedWeight + 2.5,
-    formattedExactWeight: formatWeight(roundToSingleDecimal(exactWeight)),
-    formattedRoundedWeight: formatWeight(roundedWeight),
-    formattedMinWeight: formatWeight(Math.max(0, roundedWeight - 2.5)),
-    formattedMaxWeight: formatWeight(roundedWeight + 2.5),
+    variationOneRepMax: calculation.variationOneRepMax,
+    exactWeight: calculation.exactWeight,
+    roundedWeight: calculation.roundedWeight,
+    minWeight: Math.max(0, calculation.roundedWeight - 2.5),
+    maxWeight: calculation.roundedWeight + 2.5,
+    formattedExactWeight: formatWeight(calculation.exactWeight),
+    formattedRoundedWeight: formatWeight(calculation.roundedWeight),
+    formattedMinWeight: formatWeight(Math.max(0, calculation.roundedWeight - 2.5)),
+    formattedMaxWeight: formatWeight(calculation.roundedWeight + 2.5),
   };
 };

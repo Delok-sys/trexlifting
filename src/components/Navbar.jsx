@@ -1,24 +1,21 @@
 import { NavLink } from "react-router-dom";
 
 const navItems = [
-  { label: "Home", path: "/" },
-  { label: "Tools", path: "/tools" },
-  { label: "Angebot", path: "/angebot" },
-  { label: "Erfahrungen", path: "/erfahrungen" },
-  { label: "Über mich", path: "/ueber-mich" },
+  { label: "Dashboard", path: "/dashboard" },
+  { label: "Coaching", path: "/coaching" },
+  { label: "Ueber mich", path: "/ueber-mich" },
+  { label: "Kontakt", path: "/kontakt" },
 ];
 
-export function Navbar({ isLoggedIn }) {
-  const accountLabel = isLoggedIn ? "Mein Account" : "Account";
-
+export function Navbar() {
   return (
     <header className="site-header">
       <nav className="navbar" aria-label="Hauptnavigation">
-        <NavLink className="brand" to="/" aria-label="TrexLifting Startseite">
+        <NavLink className="brand" to="/" aria-label="trexlifting Startseite">
           <span className="brand-mark" aria-hidden="true">
             T
           </span>
-          <span className="brand-text">TrexLifting</span>
+          <span className="brand-text">trexlifting</span>
         </NavLink>
 
         <div className="nav-links">
@@ -27,18 +24,10 @@ export function Navbar({ isLoggedIn }) {
               key={item.path}
               className={({ isActive }) => (isActive ? "nav-link is-active" : "nav-link")}
               to={item.path}
-              end={item.path === "/"}
             >
               {item.label}
             </NavLink>
           ))}
-
-          <NavLink
-            className={({ isActive }) => (isActive ? "nav-link is-active" : "nav-link")}
-            to="/account"
-          >
-            {accountLabel}
-          </NavLink>
         </div>
       </nav>
     </header>
