@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useDispatch } from "react-redux";
 import { CoachingCTA } from "../components/planning/CoachingCTA";
 import { IntensityRanges } from "../components/planning/IntensityRanges";
 import { PlanRecommendation } from "../components/planning/PlanRecommendation";
@@ -24,6 +25,7 @@ import {
   parseDecimalInput,
   parseIntegerInput,
 } from "../lib/strengthCalculations";
+import { saveOneRepMaxes } from "../store/slices/oneRepMaxSlice";
 import "../styles/Dashboard.css";
 
 const DASHBOARD_TABS = [
@@ -107,12 +109,14 @@ function createCombinedInitialForm(profile) {
 }
 
 export function DashboardPage() {
+  const dispatch = useDispatch();
   const { profile, updateProfileFields, updateLiftOneRepMax } = useStrengthProfile();
   const [form, setForm] = useState(() => createCombinedInitialForm(profile));
   const [activeTab, setActiveTab] = useState("planung");
   const [saveError, setSaveError] = useState("");
   const [status, setStatus] = useState("idle");
   const [planResult, setPlanResult] = useState(null);
+  const [isLiveCalculatorExpanded, setIsLiveCalculatorExpanded] = useState(false);
   const [calcForm, setCalcForm] = useState({
     liftKey: "squat",
     weight: "",
@@ -196,6 +200,22 @@ export function DashboardPage() {
         updateLiftOneRepMax(liftKey, oneRm);
       }
     });
+
+    const reduxLiftInputs = Object.entries(parsedOneRms).reduce((accumulator, [liftKey, oneRm]) => {
+      if (oneRm !== null) {
+        accumulator[liftKey] = {
+          weight: `${oneRm}`,
+          reps: "1",
+          rir: "0",
+        };
+      }
+
+      return accumulator;
+    }, {});
+
+    if (Object.keys(reduxLiftInputs).length > 0) {
+      dispatch(saveOneRepMaxes(reduxLiftInputs));
+    }
 
     const builderInput = {
       goal: form.goal,
@@ -351,76 +371,96 @@ export function DashboardPage() {
               ))}
             </div>
 
-            <section className="panel panel--soft dashboard-live-calculator">
-              <h2>1RM Rechner (live)</h2>
-              <div className="dashboard-live-calculator-grid">
-                <label className="form-field">
-                  <span>Lift</span>
-                  <select
-                    value={calcForm.liftKey}
-                    onChange={(event) =>
-                      setCalcForm((current) => ({ ...current, liftKey: event.target.value }))
-                    }
-                  >
-                    <option value="squat">Squat</option>
-                    <option value="bench">Bench</option>
-                    <option value="deadlift">Deadlift</option>
-                  </select>
-                </label>
+            <section
+              className={`panel panel--soft dashboard-live-calculator${
+                isLiveCalculatorExpanded ? "" : " is-collapsed"
+              }`}
+            >
+              <button
+                className="dashboard-live-calculator-toggle"
+                type="button"
+                aria-expanded={isLiveCalculatorExpanded}
+                aria-controls="dashboard-live-calculator-content"
+                onClick={() => setIsLiveCalculatorExpanded((current) => !current)}
+              >
+                <h2>1RM Rechner (live)</h2>
+                <span className="dashboard-live-calculator-chevron" aria-hidden="true">
+                  {isLiveCalculatorExpanded ? "▴" : "▾"}
+                </span>
+              </button>
 
-                <label className="form-field">
-                  <span>Gewicht</span>
-                  <input
-                    type="text"
-                    inputMode="decimal"
-                    value={calcForm.weight}
-                    placeholder="z. B. 160"
-                    onChange={(event) =>
-                      setCalcForm((current) => ({ ...current, weight: event.target.value }))
-                    }
-                  />
-                </label>
+              {isLiveCalculatorExpanded ? (
+                <div id="dashboard-live-calculator-content" className="page-stack page-stack--sm">
+                  <div className="dashboard-live-calculator-grid">
+                    <label className="form-field">
+                      <span>Lift</span>
+                      <select
+                        value={calcForm.liftKey}
+                        onChange={(event) =>
+                          setCalcForm((current) => ({ ...current, liftKey: event.target.value }))
+                        }
+                      >
+                        <option value="squat">Squat</option>
+                        <option value="bench">Bench</option>
+                        <option value="deadlift">Deadlift</option>
+                      </select>
+                    </label>
 
-                <label className="form-field">
-                  <span>Reps</span>
-                  <input
-                    type="text"
-                    inputMode="numeric"
-                    value={calcForm.reps}
-                    onChange={(event) =>
-                      setCalcForm((current) => ({ ...current, reps: event.target.value }))
-                    }
-                  />
-                </label>
+                    <label className="form-field">
+                      <span>Gewicht</span>
+                      <input
+                        type="text"
+                        inputMode="decimal"
+                        value={calcForm.weight}
+                        placeholder="z. B. 160"
+                        onChange={(event) =>
+                          setCalcForm((current) => ({ ...current, weight: event.target.value }))
+                        }
+                      />
+                    </label>
 
-                <label className="form-field">
-                  <span>RIR</span>
-                  <input
-                    type="text"
-                    inputMode="numeric"
-                    value={calcForm.rir}
-                    onChange={(event) =>
-                      setCalcForm((current) => ({ ...current, rir: event.target.value }))
-                    }
-                  />
-                </label>
-              </div>
+                    <label className="form-field">
+                      <span>Reps</span>
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        value={calcForm.reps}
+                        onChange={(event) =>
+                          setCalcForm((current) => ({ ...current, reps: event.target.value }))
+                        }
+                      />
+                    </label>
 
-              <div className="action-row">
-                <article className="result-panel">
-                  <span>Neues 1RM</span>
-                  <strong>{calculatedOneRm ? `${formatWeight(calculatedOneRm)} kg` : "-"}</strong>
-                </article>
+                    <label className="form-field">
+                      <span>RIR</span>
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        value={calcForm.rir}
+                        onChange={(event) =>
+                          setCalcForm((current) => ({ ...current, rir: event.target.value }))
+                        }
+                      />
+                    </label>
+                  </div>
 
-                <button
-                  className="button button--ghost"
-                  type="button"
-                  disabled={!calculatedOneRm}
-                  onClick={handleApplyCalculatedOneRm}
-                >
-                  In 1RM-Feld uebernehmen
-                </button>
-              </div>
+                  <div className="action-row">
+                    <article className="result-panel">
+                      <span>Neues 1RM</span>
+                      <strong>{calculatedOneRm ? `${formatWeight(calculatedOneRm)} kg` : "-"}</strong>
+                    </article>
+
+                    <button
+                      className="button button--ghost"
+                      type="button"
+                      disabled={!calculatedOneRm}
+                      onClick={handleApplyCalculatedOneRm}
+                    >
+                      In 1RM-Feld uebernehmen
+                    </button>
+                  </div>
+                </div>
+              ) : null}
             </section>
 
             <div className="action-row">

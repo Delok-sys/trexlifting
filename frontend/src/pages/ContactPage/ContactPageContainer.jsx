@@ -5,7 +5,7 @@ export function ContactPageContainer() {
     <ContactPage
       kicker="Kontakt"
       title="Kontakt"
-      description="Diese Seite ist aktuell noch leer und kann als Naechstes gefuellt werden."
+      description="Schick uns deine Nachricht. Auf Wunsch nehmen wir deine Dashboard-Daten direkt mit in die Anfrage auf."
     />
   );
 }

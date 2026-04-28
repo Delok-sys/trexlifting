@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const footerNavigation = [
   { label: "Dashboard", path: "/dashboard" },
-  { label: "Coaching", path: "/coaching" },
+  { label: "Produkte", path: "/produkte" },
   { label: "Ueber mich", path: "/ueber-mich" },
   { label: "Kontakt", path: "/kontakt" },
 ];

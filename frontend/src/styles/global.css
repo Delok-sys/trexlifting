@@ -206,6 +206,97 @@ button {
   gap: 18px;
 }
 
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.product-card {
+  display: grid;
+  gap: 14px;
+  width: 100%;
+  padding: 14px;
+  border: 1px solid rgba(16, 32, 48, 0.1);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.9);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease,
+    border-color 150ms ease;
+}
+
+.product-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(46, 125, 50, 0.4);
+  box-shadow: 0 16px 28px rgba(16, 32, 48, 0.12);
+}
+
+.product-card:focus-visible {
+  outline: 3px solid rgba(46, 125, 50, 0.28);
+  outline-offset: 2px;
+}
+
+.product-card-image-wrap {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.product-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.product-card-content {
+  display: grid;
+  gap: 10px;
+}
+
+.product-card-content h3 {
+  margin: 0;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(10, 18, 26, 0.56);
+  backdrop-filter: blur(3px);
+}
+
+.modal-card {
+  width: min(100%, 700px);
+  max-height: min(85vh, 760px);
+  overflow: auto;
+  display: grid;
+  gap: 16px;
+  padding: 22px;
+  border: 1px solid rgba(16, 32, 48, 0.12);
+  border-radius: 22px;
+  background: #f8fbf6;
+  box-shadow: 0 30px 60px rgba(10, 18, 26, 0.28);
+}
+
+.modal-close {
+  justify-self: end;
+}
+
+.modal-image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
 .action-row {
   display: flex;
   flex-wrap: wrap;
@@ -307,6 +398,25 @@ button {
 .strength-notes {
   min-height: 120px;
   resize: vertical;
+}
+
+.contact-notes {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.contact-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #425466;
+  font-weight: 700;
+}
+
+.contact-checkbox input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
 }
 
 .plain-list {
@@ -518,6 +628,10 @@ button {
   }
 
   .card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .product-grid {
     grid-template-columns: 1fr;
   }
 

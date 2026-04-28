@@ -10,17 +10,17 @@ export function CoachingCTA() {
 
       <p className="page-copy">
         Fuer vollstaendige Trainingsplanung, laufende Betreuung und individuelle Anpassungen erfolgt die
-        Umsetzung im trexlifting Coaching.
+        Umsetzung in den trexlifting Produkten.
       </p>
 
       <div className="action-row">
-        <Link className="button button--primary" to="/coaching">
-          Individuellen Plan im Coaching erhalten
+        <Link className="button button--primary" to="/produkte">
+          Individuellen Plan im Produkt erhalten
         </Link>
         <Link className="button button--ghost" to="/kontakt">
           Coaching anfragen
         </Link>
-        <Link className="button button--secondary" to="/coaching">
+        <Link className="button button--secondary" to="/produkte">
           Mit trexlifting starten
         </Link>
       </div>
